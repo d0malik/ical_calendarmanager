@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CIS*2750 - A3, 0933553</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="cis*2750, a3 - ics calendar manager">
+    <meta name="keywords" content="cis*2750 a3 ics calendar manager calendarmanager">
+    <meta name="author" content="Daniel Domalik">
+    <!-- Load jquery, bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Custom CSS End -->
+</head>
+<body>
+    <br>
+    <!-- Status Panel -->
+    <h3>Status Panel</h3>
+    <textarea rows="4" class="status-area" id="status-area"></textarea>
+    <h5></h5>
+    <div id="clear-wrapper" class="clear-wrapper">
+        <button name="clear-btn" id="clear-btn" class="clear-btn"></button>
+        <label for="clear-btn" id="clear-btn-lbl">Clear</label>
+    </div>
+    <hr>
+    <!-- Status Panel -->
+
+    <!-- File Log Panel -->
+    <form id="file_log" action="/upload" method="post" enctype="multipart/form-data">
+        <h3>File Log Panel</h2>
+        <div id="table-wrapper" class="table-wrapper">
+            <table id="file_log-table" class="file_log-table">
+                <tr>
+                    <th>File Name (click to download)</th>
+                    <th>Version</th>
+                    <th>Product ID</th>
+                    <th>Number of Events</th>
+                    <th>Number of Properties</th>
+                </tr>
+            </table>
+        </div>
+        <h5 id="file_log-h5">No files</h5>
+        <div class="btn-wrapper" id="btn-wrapper">
+            <input type="file" id="browse-btn" class="browse-btn"/>
+            <label for="browse-btn" id="browse-btn-lbl">Choose a file</label>
+            <input type="submit" name="submit" id="upload-btn" class="upload-btn"/>
+            <label for="upload-btn">Upload</label>
+        </div>
+    </form>
+    <hr>
+    <!-- File Log Panel -->
+    
+    <!-- Calendar View Panel -->
+    <div class="_cal" name="_cal" id="_cal">
+        <h3>Calendar View Panel</h3>
+        <form id="calendar_view">
+            <div class="cal-btn-wrapper" id="cal-btn-wrapper">
+                <select name="files-list" id="files-list" class="files-list">
+                    <option value =""></option>'
+                </select>
+                <input type="submit" name="submit" id="view-btn" class="view-btn"/>
+                <label for="view-btn">View Calendar</label>
+            </div>
+            <h5></h5>
+            <div id="calendar-table-wrapper" class="calendar-table-wrapper">
+                <table id="calendar-table" class="calendar-table"></table>
+            </div>
+        </form>
+        <hr>
+    </div>
+    <!-- Calendar View Panel -->
+
+    <!-- Additional Functionality -->
+    <div class="_funcwrapper" id="_funcwrapper" name="_funcwrapper">
+        <!-- Create Calendar -->
+        <div class="_create" name="_create" id="_create">
+            <h3>Create a Calendar</h3>
+            <form id="create_cal" name="create_cal" class="create_cal" action="/createCal" enctype="multipart/form-data" method="post">
+                <label for="create_filename" class="cal_label">Filename</label>
+                <input type="text" id="create_filename" name="create_filename" placeholder="example.ics">
+                <br>
+                <label for="create_version" class="cal_label">Version</label>
+                <input type="text" id="create_version" name="create_version" placeholder="Version">
+                <br>
+                <label for="create_prodID" class="cal_label">Product ID</label>
+                <input type="text" id="create_prodID" name="create_prodID" placeholder="Product ID">
+                <br><br>
+                <label for="create_UID" class="cal_label">UID</label>
+                <input type="text" id="create_UID" name="create_UID" placeholder="Unique Identifier">
+                <br>
+                <label for="create_DTSTART" class="cal_label">DT Start</label>
+                <input type="date" id="create_DTSTART" name="create_DTSTART" class="create_DTSTART">
+                <input type="text" id="_create_DTSTART" name="_create_DTSTART" class="_create_DTSTART"
+                       pattern="([01]?[0-9]|2[0-3])[0-5][0-9][0-5][0-9]" placeholder="hhmmss">
+                <br>
+                <label for="create_summary" class="cal_label">Summary</label>
+                <input type="text" id="create_summary" name="create_summary" placeholder="Summary">
+            </form>
+            <h5></h5>
+            <input type="submit" name="submit" id="create-btn" class="create-btn"/>
+            <label for="create-btn">Create Calendar</label>
+        </div>
+        <!-- Create Calendar -->
+        <!-- Add Event -->
+        <div class="_add" name="_add" id="_add">
+            <h3>Add an Event</h3>
+            <form id="add_cal" action="/addEvent" enctype="multipart/form-data" method="post">
+                <label for="add-files-list" class="add_label">Filename</label>
+                <select name="add-files-list" id="add-files-list" class="add-files-list">
+                    <option value =""></option>
+                </select>
+                <br><br>
+                <label for="add_UID" class="add_label">UID</label>
+                <input type="text" id="add_UID" name="add_UID" placeholder="Unique Identifier">
+                <br>
+                <label for="add_DTSTART" class="add_label">DT Start</label>
+                <input type="date" id="add_DTSTART" name="add_DTSTART" placeholder="Date-Time Start">
+                <input type="text" id="_add_DTSTART" name="_add_DTSTART" class="_add_DTSTART"
+                       pattern="([01]?[0-9]|2[0-3])[0-5][0-9][0-5][0-9]" placeholder="hhmmss">
+                <br>
+                <label for="add_summary" class="add_label">Summary</label>
+                <input type="text" id="add_summary" name="add_summary" placeholder="Summary">
+            </form>
+            <h5></h5>
+            <input type="submit" name="submit" id="add-btn" class="add-btn"/>
+            <label for="add-btn">Add Event</label>
+        </div>
+        <!-- Add Event -->
+    </div>
+    <br style="clear:both;">
+    <hr style="clear:both;">
+    <!-- Additional Functionality -->
+    
+    <!-- A4 Functionality -->
+    <div class="_login" name="_login" id="_login">
+        <h3>Database Login</h3>
+        <form id="login" action="/addEvent" enctype="multipart/form-data" method="post">
+            <label for="login_user" class="login_label">Username</label>
+            <input type="text" id="login_user" name="login_user" class="login_user">
+            <br>
+            <label for="login_pw" class="login_label">Password</label>
+            <input type="text" id="login_pw" name="login_pw" class="login_pw">
+            <br>
+            <label for="login_db" class="login_label">Database</label>
+            <input type="text" id="login_db" name="login_db" class="login_db">
+            <br>
+            <input type="submit" name="submit" id="login-btn" class="login-btn"/>
+            <label for="login-btn">Login</label>
+            <br><br><h5></h5>
+        </form>
+    </div>
+
+    <!-- Database Query -->
+    <div class="_dbwrapper" id="_dbwrapper" name="_dbwrapper">
+        <h3>Database Functions</h3>
+        <input type="submit" name="submit" id="storeall-btn" class="storeall-btn"/>
+        <label for="storeall-btn">Store All Files</label>
+        <body></body>
+        <input type="submit" name="submit" id="clearall-btn" class="clearall-btn"/>
+        <label for="clearall-btn">Clear All Data</label>
+        <body></body>
+        <input type="submit" name="submit" id="display-btn" class="display-btn"/>
+        <label for="display-btn">Display DB Status</label>
+        <body></body>
+        <input type="submit" name="submit" id="logout-btn" class="logout-btn"/>
+        <label for="logout-btn">Logout</label>
+        <br><h5></h5>
+        <h4>Queries</h4>
+        <select name="query-list" id="query-list" class="query-list">
+            <option value =""></option>
+            <option value ="1">Display all events sorted by start date</option>
+            <option value ="2">Display all events from a specific file</option>
+            <option value ="3">Display all events with same start date</option>
+            <option value ="4">Display all events with one alarm</option>
+            <option value ="5">Display all alarms with an event summary</option>
+            <option value ="6">Display all alarms from a specific file</option>
+        </select>
+        <body></body>
+        <input type="submit" name="submit" id="execute-btn" class="execute-btn"/>
+        <label for="execute-btn">Execute Query</label>
+        <h5></h5>
+        <div name="db2" id="db2" class="db2">
+            <label for="file_db" class="filedb_label">Filename</label>
+            <input type="text" id="file_db" name="file_db" class="file_db" placeholder="example.ics">
+        </div>
+        <body></body>
+        <br><h5></h5>
+    </div>
+    <!-- Database Query -->
+    <!-- A4 Functionality -->
+
+    <br>
+    <!-- Leave me at the bottom of body -->
+    <script src="/index.js"></script>
+</body>
+</html>
+
+<!--
+..........................................................................................................................................................
+.........................................iiii..............llll..................................................................llll..iiii..kkkk.........
+.DDDDDDDDDD..............................iiii..............llll........DDDDDDDDDD................................................llll..iiii..kkkk.........
+.DDDDDDDDDDDD............................iiii..............llll........DDDDDDDDDDDD..............................................llll..iiii..kkkk.........
+.DDDDDDDDDDDDD.............................................llll........DDDDDDDDDDDDD.............................................llll........kkkk.........
+.DDDDD..DDDDDD..aaaaaaaaa...nnnnnnnnnn...iiii...eeeeeeee...llll........DDDDD..DDDDDD...oooooooo...mmmmmmmmm.mmmmmm...aaaaaaaaa...llll..iiii..kkkk..kkkkk..
+.DDDDD...DDDDD..aaaaaaaaaa..nnnnnnnnnn...iiii..eeeeeeeeee..llll........DDDDD...DDDDD..oooooooooo..mmmmmmmmmmmmmmmm...aaaaaaaaaa..llll..iiii..kkkk.kkkkk...
+.DDDDD....DDDD..aaaaaaaaaa..nnnnnnnnnnn..iiii..eeeeeeeeee..llll........DDDDD....DDDD..ooooooooooo.mmmmmmmmmmmmmmmmm..aaaaaaaaaa..llll..iiii..kkkkkkkkk....
+.DDDDD....DDDD...aaaaaaaaa..nnnnn..nnnn..iiii.ieeee..eeeee.llll........DDDDD....DDDD.Doooo..ooooo.mmmmm.mmmmm.mmmmm...aaaaaaaaa..llll..iiii..kkkkkkkk.....
+.DDDDD....DDDD..aaaaaaaaaa..nnnn...nnnn..iiii.ieeeeeeeeeee.llll........DDDDD....DDDD.Doooo...oooo.mmmm..mmmmm..mmmm..aaaaaaaaaa..llll..iiii..kkkkkkk......
+.DDDDD...DDDDD.Daaaaa.aaaa..nnnn...nnnn..iiii.ieeeeeeeeeee.llll........DDDDD...DDDDD.Doooo...oooo.mmmm..mmmm...mmmm.maaaaa.aaaa..llll..iiii..kkkkkkkk.....
+.DDDDD..DDDDDD.Daaaa..aaaa..nnnn...nnnn..iiii.ieeee.....e..llll........DDDDD..DDDDDD.Doooo..ooooo.mmmm..mmmm...mmmm.maaaa..aaaa..llll..iiii..kkkkkkkkk....
+.DDDDDDDDDDDDD.Daaaaaaaaaa..nnnn...nnnn..iiii..eeeeeeeeee..llll........DDDDDDDDDDDDD..ooooooooooo.mmmm..mmmm...mmmm.maaaaaaaaaa..llll..iiii..kkkkkkkkkk...
+.DDDDDDDDDDDD...aaaaaaaaaa..nnnn...nnnn..iiii..eeeeeeeeee..llll........DDDDDDDDDDDD...oooooooooo..mmmm..mmmm...mmmm..aaaaaaaaaa..llll..iiii..kkkk.kkkkkk..
+.DDDDDDDDDD.....aaaaaaaaaa..nnnn...nnnn..iiii...eeeeeeeee..llll........DDDDDDDDDD......oooooooo...mmmm..mmmm...mmmm..aaaaaaaaaa..llll..iiii..kkkk..kkkkk..
+..........................................................................................................................................................
+..................................0000000.....99999999....333333333....333333333....5555555555...5555555555...333333333...................................
+.................................000000000...9999999999...3333333333...3333333333...5555555555...5555555555...3333333333..................................
+................................0000000000...9999999999...3333333333...3333333333...5555555555...5555555555...3333333333..................................
+................................0000..00000.99999..99999........3333.........3333...5555.........5555...............3333..................................
+...............................00000...0000.99999..99999......333333.......333333...555555555....555555555........333333..................................
+...............................00000...0000..99999999999....33333333.....33333333...5555555555...5555555555.....33333333..................................
+...............................00000...0000..99999999999....33333333.....33333333...5555555555...5555555555.....33333333..................................
+...............................00000...0000...9999999999....33333333.....33333333.........55555........55555....33333333..................................
+...............................00000...0000.....99999999........33333........33333........55555........55555........33333.................................
+................................0000..00000........9999...3.....33333..3.....33333..55....55555..55....55555..3.....33333.................................
+................................0000000000...9999999999...3333333333...3333333333...5555555555...5555555555...3333333333..................................
+.................................000000000...999999999....3333333333...3333333333...5555555555...5555555555...3333333333..................................
+..................................0000000....99999999.....333333333....333333333....555555555....555555555....333333333...................................
+..........................................................................................................................................................
+-->
